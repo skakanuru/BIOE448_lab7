@@ -7,6 +7,7 @@
   The following variables are automatically generated and updated when changes are made to the Thing
 
   float bPM;
+  float refreshRate;
 
   Variables which are marked as READ/WRITE in the Cloud Thing will also have functions
   which are called when their values are changed from the Dashboard.
@@ -19,7 +20,7 @@ unsigned long pulse_period = 0;
 
 const int sensor_pin = A0;
 int pulse_signal = 0;
-//float bPM = 0.0;
+//float BPM = 0.0;
 
 int upper_threshold = 860;
 int lower_threshold = 800;
@@ -71,9 +72,18 @@ void loop() {
 
   delay(50);
   counter++;
-  if (counter > 200){
+  if (counter > (refreshRate * 20.0)){
     ArduinoCloud.update();
-    Serial.println(BPM);
+    Serial.println(bPM);
     counter = 0;
   }
+  
+}
+
+/*
+  Since RefreshRate is READ_WRITE variable, onRefreshRateChange() is
+  executed every time a new value is received from IoT Cloud.
+*/
+void onRefreshRateChange()  {
+  // Add your code here to act upon RefreshRate change
 }
